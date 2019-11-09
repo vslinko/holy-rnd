@@ -35,7 +35,9 @@ for (let x = Math.max(0, me.x - 3); x < Math.min(me.x + 3, API.getArenaSize()); 
     if (couldMove) {
       if (map[x][y] == 0 && !myCell && distanceFromMe <= 2) {
         const minDistance = Math.min(...enemies.map(e => getDistance({ x, y }, e)))
-        map[x][y] = 1/minDistance
+        if (minDistance > 0) {
+          map[x][y] = 1/minDistance
+        }
       }
 
       possibleMoves.push({ x, y, score: map[x][y]})
