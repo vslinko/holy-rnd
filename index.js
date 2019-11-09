@@ -5,70 +5,47 @@ function getDistance(p1, p2) {
 }
 
 const me = API.getCurrentPosition();
+const enemies = API.getEnemies().map(e => e.position);
 
-const enemies = API.getEnemies().map(e => {
-  return {
-    ...e.position,
-    distance: getDistance(me, e.position),
+const map = new Array(API.getArenaSize()).fill(0)
+  .map(() => new Array(API.getArenaSize()).fill(0));
+
+enemies.forEach((e) => {
+  for (let x = Math.max(0, e.x - 3); x < Math.min(e.x + 3, API.getArenaSize()); x++) {
+    for (let y = Math.max(0, e.y - 3); y < Math.min(e.y + 3, API.getArenaSize()); y++) {
+      if (x == e.x && y == e.y) {
+        if (getDistance(me, e) < API.getActionPointsCount()) {
+          map[x][y] += 1
+        } else {
+          map[x][y] -= 2
+        }
+      } else if (getDistance({x,y}, e) <= 3) {
+        map[x][y] -= 2
+      }
+    }
   }
 });
 
-const nearestEnemy = enemies.concat().sort((a, b) => a.distance - b.distance)[0]
+const possibleMoves = []
+for (let x = Math.max(0, me.x - 3); x < Math.min(me.x + 3, API.getArenaSize()); x++) {
+  for (let y = Math.max(0, me.y - 3); y < Math.min(me.y + 3, API.getArenaSize()); y++) {
+    const myCell = x == me.x && y == me.y
+    const couldMove = myCell || getDistance({x,y}, me) <= API.getActionPointsCount()
+    if (couldMove) {
+      if (map[x][y] == 0 && !myCell) {
+        const minDistance = Math.min(...enemies.map(e => getDistance({ x, y }, e)))
+        map[x][y] = 1/minDistance
+      }
 
-
-console.log(me, nearestEnemy, API.getActionPointsCount())
-
-if (nearestEnemy.distance <= API.getActionPointsCount()) {
-  console.log('<=3')
-  API.move(nearestEnemy.x, nearestEnemy.y)
-} else if (nearestEnemy.distance > 3 && nearestEnemy.distance <= 4) {
-  if (me.x > nearestEnemy.x && me.x < API.getArenaSize() - 1) {
-    console.log('~4x+')
-    API.move(
-      me.x + 1,
-      me.y,
-    );
-  } else if (me.x < nearestEnemy.x && me.x > 0) {
-    console.log('~4x-')
-    API.move(
-      me.x - 1,
-      me.y,
-    );
-  } else if (me.y > nearestEnemy.y && me.y < API.getArenaSize() - 1) {
-    console.log('~4y+')
-    API.move(
-      me.x,
-      me.y + 1,
-    );
-  } else if (me.y < nearestEnemy.y && me.y > 0) {
-    console.log('~4y-')
-    API.move(
-      me.x,
-      me.y - 1,
-    )
-  } else {
-    console.log('~4 none')
+      possibleMoves.push({ x, y, score: map[x][y]})
+    }
   }
-} else if (nearestEnemy.distance > 4 && nearestEnemy.distance <= 5) {
-  if (me.x != nearestEnemy.x) {
-    console.log('~5x')
-    API.move(
-      me.x + (nearestEnemy.x == 0 ? 0 : (nearestEnemy.x > me.x ? 1 : -1)),
-      me.y,
-    );
-  } else {
-    console.log('~5y')
-    API.move(
-      me.x,
-      me.y + (nearestEnemy.y == 0 ? 0 : (nearestEnemy.y > me.y ? 1 : -1)),
-    );
-  }
-} else {
-  console.log('>5')
-  API.move(
-    me.x + (nearestEnemy.x == 0 ? 0 : (nearestEnemy.x > me.x ? 1 : -1)),
-    me.y + (nearestEnemy.y == 0 ? 0 : (nearestEnemy.y > me.y ? 1 : -1)),
-  );
 }
 
-console.log()
+const bestMove = possibleMoves.sort((a, b) => b.score - a.score)[0]
+
+// console.log(map)
+// console.log(possibleMoves)
+// console.log(bestMove)
+
+API.move(bestMove.x, bestMove.y)
