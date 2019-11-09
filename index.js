@@ -1,9 +1,6 @@
 function getDistance(p1, p2) {
   return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2))
 }
-function getMoves(p1, p2) {
-  return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y)
-}
 
 const me = API.getCurrentPosition();
 
@@ -11,7 +8,6 @@ const enemies = API.getEnemies().map(e => {
   return {
     ...e.position,
     distance: getDistance(me, e.position),
-    moves: getMoves(me, e.position),
   }
 });
 
