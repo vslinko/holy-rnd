@@ -15,12 +15,12 @@ enemies.forEach((e) => {
     for (let y = Math.max(0, e.y - 3); y < Math.min(e.y + 3, API.getArenaSize()); y++) {
       if (x == e.x && y == e.y) {
         if (getDistance(me, e) < API.getActionPointsCount()) {
-          map[x][y] += 1
+          map[x][y] += 2
         } else {
-          map[x][y] -= 2
+          map[x][y] -= 10
         }
       } else if (getDistance({x,y}, e) <= 3) {
-        map[x][y] -= 2
+        map[x][y] -= 10
       }
     }
   }
@@ -36,7 +36,7 @@ for (let x = Math.max(0, me.x - 3); x < Math.min(me.x + 3, API.getArenaSize()); 
       if (map[x][y] == 0 && !myCell && distanceFromMe <= 2) {
         const minDistance = Math.min(...enemies.map(e => getDistance({ x, y }, e)))
         if (minDistance > 0) {
-          map[x][y] = 1/minDistance
+          map[x][y] += 1/minDistance
         }
       }
 
