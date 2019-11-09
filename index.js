@@ -17,7 +17,9 @@ enemies.forEach((e) => {
         if (getDistance(me, e.position) <= API.getActionPointsCount()) {
           map[x][y] += 2
         } else {
-          map[x][y] -= 10
+          if (e.name !== 'nin-jin') {
+            map[x][y] -= 10
+          }
         }
       } else if (getDistance({x,y}, e.position) <= 3) {
         if (e.name !== 'nin-jin') {
