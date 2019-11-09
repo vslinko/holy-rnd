@@ -1,6 +1,3 @@
-// function getDistance(p1, p2) {
-//   return Math.round(Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2)))
-// }
 function getDistance(p1, p2) {
   return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y)
 }
@@ -23,16 +20,37 @@ const moveType = diffX && diffY ? 'DIAGONAL' : (
   diffX ? 'X' : 'Y'
 )
 
-if (nearestEnemy.distance === 4) {
+console.log(me, nearestEnemy)
+
+if (nearestEnemy.distance === 5) {
+  if (diffX) {
+    console.log('5x')
+    API.move(
+      me.x + (nearestEnemy.x == 0 ? 0 : (nearestEnemy.x > me.x ? 1 : -1)),
+      me.y,
+      );
+    } else {
+    console.log('5y')
+    API.move(
+      me.x,
+      me.y + (nearestEnemy.y == 0 ? 0 : (nearestEnemy.y > me.y ? 1 : -1)),
+    );
+  }
+} else if (nearestEnemy.distance === 4) {
+  console.log('4')
   // continue
 } else if (nearestEnemy.distance < 4) {
+  console.log('<4')
   API.move(nearestEnemy.x, nearestEnemy.y)
 } else {
+  console.log('>5')
   API.move(
     me.x + (nearestEnemy.x == 0 ? 0 : (nearestEnemy.x > me.x ? 1 : -1)),
     me.y + (nearestEnemy.y == 0 ? 0 : (nearestEnemy.y > me.y ? 1 : -1)),
   );
 }
+
+console.log()
 
 // switch (moveType) {
 //   case 'DIAGONAL':
