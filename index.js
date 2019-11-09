@@ -14,7 +14,7 @@ enemies.forEach((e) => {
   for (let x = Math.max(0, e.x - 3); x < Math.min(e.x + 3, API.getArenaSize()); x++) {
     for (let y = Math.max(0, e.y - 3); y < Math.min(e.y + 3, API.getArenaSize()); y++) {
       if (x == e.x && y == e.y) {
-        if (getDistance(me, e) < API.getActionPointsCount()) {
+        if (getDistance(me, e) <= API.getActionPointsCount()) {
           map[x][y] += 2
         } else {
           map[x][y] -= 10
