@@ -29,10 +29,11 @@ enemies.forEach((e) => {
 const possibleMoves = []
 for (let x = Math.max(0, me.x - 3); x < Math.min(me.x + 3, API.getArenaSize()); x++) {
   for (let y = Math.max(0, me.y - 3); y < Math.min(me.y + 3, API.getArenaSize()); y++) {
+    const distanceFromMe = getDistance({x,y}, me)
     const myCell = x == me.x && y == me.y
-    const couldMove = myCell || getDistance({x,y}, me) <= API.getActionPointsCount()
+    const couldMove = myCell || distanceFromMe <= API.getActionPointsCount()
     if (couldMove) {
-      if (map[x][y] == 0 && !myCell) {
+      if (map[x][y] == 0 && !myCell && distanceFromMe <= 2) {
         const minDistance = Math.min(...enemies.map(e => getDistance({ x, y }, e)))
         map[x][y] = 1/minDistance
       }
