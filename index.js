@@ -20,18 +20,32 @@ if (nearestEnemy.distance <= API.getActionPointsCount()) {
   console.log('<=3')
   API.move(nearestEnemy.x, nearestEnemy.y)
 } else if (nearestEnemy.distance > 3 && nearestEnemy.distance <= 4) {
-  if (me.x != nearestEnemy.x) {
-    console.log('~4x')
+  if (me.x > nearestEnemy.x && me.x < API.getArenaSize() - 1) {
+    console.log('~4x+')
     API.move(
-      me.x + (nearestEnemy.x == 0 ? 0 : (nearestEnemy.x > me.x ? -1 : 1)),
+      me.x + 1,
       me.y,
     );
-    } else {
-    console.log('~4y')
+  } else if (me.x < nearestEnemy.x && me.x > 0) {
+    console.log('~4x-')
+    API.move(
+      me.x - 1,
+      me.y,
+    );
+  } else if (me.y > nearestEnemy.y && me.y < API.getArenaSize() - 1) {
+    console.log('~4y+')
     API.move(
       me.x,
-      me.y + (nearestEnemy.y == 0 ? 0 : (nearestEnemy.y > me.y ? -1 : 1)),
+      me.y + 1,
     );
+  } else if (me.y < nearestEnemy.y && me.y > 0) {
+    console.log('~4y-')
+    API.move(
+      me.x,
+      me.y - 1,
+    )
+  } else {
+    console.log('~4 none')
   }
 } else if (nearestEnemy.distance > 4 && nearestEnemy.distance <= 5) {
   if (me.x != nearestEnemy.x) {
@@ -40,7 +54,7 @@ if (nearestEnemy.distance <= API.getActionPointsCount()) {
       me.x + (nearestEnemy.x == 0 ? 0 : (nearestEnemy.x > me.x ? 1 : -1)),
       me.y,
     );
-    } else {
+  } else {
     console.log('~5y')
     API.move(
       me.x,
