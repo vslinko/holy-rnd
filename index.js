@@ -11,8 +11,8 @@ const map = new Array(API.getArenaSize()).fill(0)
   .map(() => new Array(API.getArenaSize()).fill(0));
 
 enemies.forEach((e) => {
-  for (let x = Math.max(0, e.x - 3); x < Math.min(e.x + 3, API.getArenaSize()); x++) {
-    for (let y = Math.max(0, e.y - 3); y < Math.min(e.y + 3, API.getArenaSize()); y++) {
+  for (let x = Math.max(0, e.x - 4); x < Math.min(e.x + 4, API.getArenaSize()); x++) {
+    for (let y = Math.max(0, e.y - 4); y < Math.min(e.y + 4, API.getArenaSize()); y++) {
       if (x == e.x && y == e.y) {
         if (getDistance(me, e) <= API.getActionPointsCount()) {
           map[x][y] += 2
@@ -27,8 +27,8 @@ enemies.forEach((e) => {
 });
 
 const possibleMoves = []
-for (let x = Math.max(0, me.x - 3); x < Math.min(me.x + 3, API.getArenaSize()); x++) {
-  for (let y = Math.max(0, me.y - 3); y < Math.min(me.y + 3, API.getArenaSize()); y++) {
+for (let x = Math.max(0, me.x - 4); x < Math.min(me.x + 4, API.getArenaSize()); x++) {
+  for (let y = Math.max(0, me.y - 4); y < Math.min(me.y + 4, API.getArenaSize()); y++) {
     const distanceFromMe = getDistance({x,y}, me)
     const myCell = x == me.x && y == me.y
     const couldMove = myCell || distanceFromMe <= API.getActionPointsCount()
